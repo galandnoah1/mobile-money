@@ -37,6 +37,6 @@ public class ApiError {
         this.message = message;
         this.error = error;
         this.code = code;
-        this.validationErrors = new ArrayList<ValidationError>();
+        this.validationErrors = new ArrayList<>();
     }
 }
