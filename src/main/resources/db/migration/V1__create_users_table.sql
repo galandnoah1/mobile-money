@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users(
-    id uuid default pg_catalog.gen_random_uuid(),
+    id uuid primary key default pg_catalog.gen_random_uuid(),
     name varchar(255) not null ,
     phone varchar(9) not null unique check ( length(phone) = 9 ),
     pin varchar(5) not null check ( length(pin) = 5 ) ,

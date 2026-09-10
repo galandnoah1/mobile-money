@@ -6,6 +6,7 @@ import com.galandnoah.mobile_money.user.dto.UserResponse;
 import com.galandnoah.mobile_money.user.entity.User;
 import com.galandnoah.mobile_money.user.mapper.UserMapper;
 import com.galandnoah.mobile_money.user.repository.UserRepository;
+import com.galandnoah.mobile_money.wallet.service.WalletService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ import java.time.Instant;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final WalletService walletService;
 
     /**
      * Create new user account
@@ -48,6 +49,8 @@ public class UserService {
         user.setRole(createUser.role());
 
         User created = userRepository.save(user);
+
+        walletService.createWallet(createUser.phone());
 
         log.info("New user created: {}", createUser.phone());
 

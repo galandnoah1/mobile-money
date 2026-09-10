@@ -1,6 +1,7 @@
 package com.galandnoah.mobile_money.user.entity;
 
 import com.galandnoah.mobile_money.user.UserRole;
+import com.galandnoah.mobile_money.wallet.entity.Wallet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
