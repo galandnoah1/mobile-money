@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface WalletRepository extends JpaRepository<Wallet, UUID> {
@@ -21,4 +22,14 @@ public interface WalletRepository extends JpaRepository<Wallet, UUID> {
             nativeQuery = true
     )
     IWalletResponse getBalance(@Param("phone")String phone);
+
+    @Query(
+            value = """
+                    SELECT * FROM wallets w
+                    JOIN users u ON w.user_id = u.id
+                     WHERE u.phone = :phone
+                                        """,
+            nativeQuery = true
+    )
+    Optional<Wallet> findByPhone(@Param("phone")String phone);
 }

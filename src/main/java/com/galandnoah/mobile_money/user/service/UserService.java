@@ -1,6 +1,6 @@
 package com.galandnoah.mobile_money.user.service;
 
-import com.galandnoah.mobile_money.exceptiom.AccountAlreadyExist;
+import com.galandnoah.mobile_money.exceptiom.AccountAlreadyExistException;
 import com.galandnoah.mobile_money.user.dto.CreateUser;
 import com.galandnoah.mobile_money.user.dto.UserResponse;
 import com.galandnoah.mobile_money.user.entity.User;
@@ -39,7 +39,7 @@ public class UserService {
         if (userRepository.existsByPhone(createUser.phone()))
         {
             log.warn("Phone number already used");
-            throw new AccountAlreadyExist();
+            throw new AccountAlreadyExistException();
         }
 
         user.setActive(true);

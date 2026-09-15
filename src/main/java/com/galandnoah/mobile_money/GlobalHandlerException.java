@@ -2,7 +2,7 @@ package com.galandnoah.mobile_money;
 
 
 import com.galandnoah.mobile_money.common.ApiError;
-import com.galandnoah.mobile_money.exceptiom.AccountAlreadyExist;
+import com.galandnoah.mobile_money.exceptiom.AccountAlreadyExistException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +37,8 @@ public class GlobalHandlerException {
                 .body(apiError);
     }
 
-    @ExceptionHandler(AccountAlreadyExist.class)
-    public ResponseEntity<ApiError> handleConflictException(AccountAlreadyExist exception)
+    @ExceptionHandler(AccountAlreadyExistException.class)
+    public ResponseEntity<ApiError> handleConflictException(AccountAlreadyExistException exception)
     {
 
 

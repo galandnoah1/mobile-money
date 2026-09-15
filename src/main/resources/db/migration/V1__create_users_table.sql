@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS users(
     updated_at timestamptz
 );
 
-CREATE INDEX idx_users_phone ON users(phone);
-CREATE INDEX idx_users_active ON users(active);
-CREATE INDEX idx_users_verified ON users(verified);
+CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
+CREATE INDEX IF NOT EXISTS idx_users_active ON users(active);
+CREATE INDEX IF NOT EXISTS idx_users_verified ON users(verified);

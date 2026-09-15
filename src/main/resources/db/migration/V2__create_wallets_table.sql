@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS wallets(
                                     updated_at timestamptz
 );
 
-CREATE INDEX idx_wallets_user_id ON wallets(user_id);
+CREATE INDEX IF NOT EXISTS idx_wallets_user_id ON wallets(user_id);
