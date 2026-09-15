@@ -6,11 +6,11 @@ import com.galandnoah.mobile_money.exceptiom.InsufficientBalanceException;
 import com.galandnoah.mobile_money.transaction.dto.CreateTransaction;
 import com.galandnoah.mobile_money.transaction.dto.TransactionResponse;
 import com.galandnoah.mobile_money.transaction.entity.Transaction;
+import com.galandnoah.mobile_money.transaction.enums.LedgerType;
 import com.galandnoah.mobile_money.transaction.enums.TransactionStatus;
 import com.galandnoah.mobile_money.transaction.enums.TransactionType;
 import com.galandnoah.mobile_money.transaction.mapper.TransactionMapper;
 import com.galandnoah.mobile_money.transaction.pattern.FeeFactory;
-import com.galandnoah.mobile_money.transaction.repository.LedgerEntryRepository;
 import com.galandnoah.mobile_money.transaction.repository.TransactionRepository;
 import com.galandnoah.mobile_money.user.repository.UserRepository;
 import com.galandnoah.mobile_money.wallet.entity.Wallet;
@@ -32,7 +32,7 @@ import java.time.LocalDate;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final LedgerEntryRepository ledgerEntryRepository;
+    private final LedgerService ledgerService;
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
     private final FeeFactory feeFactory;
@@ -42,12 +42,12 @@ public class TransactionService {
      * Transfer money from one account to another
      * */
     @Transactional
-    public TransactionResponse transferMoney(CreateTransaction createTransaction, HttpServletRequest httpRequest) throws AccountNotFoundException, DeactivatedAccountException, InsufficientBalanceException
+    public TransactionResponse transferMoney(CreateTransaction createTransaction, String idempotencyKey) throws AccountNotFoundException, DeactivatedAccountException, InsufficientBalanceException
     {
-        String idempotencyKey = httpRequest.getHeader("idempotencyKey");
+
 
         try {
-            log.info("{} want to send money to {}", createTransaction.initiatorPhone(), createTransaction.beneficiaryPhone());
+            log.info("{} want to send {} to {}", createTransaction.initiatorPhone(),createTransaction.amount(), createTransaction.beneficiaryPhone());
 
             if (!userRepository.existsByPhone(createTransaction.beneficiaryPhone()))
             {
@@ -84,6 +84,15 @@ public class TransactionService {
             log.info("Transaction initiated - {}", transaction.getReference());
             Transaction initiatedTransaction = transactionRepository.save(transaction);
 
+            ledgerService.createEntry(initiatedTransaction.getInitiatorPhone(), initiatedTransaction.getAmount(), LedgerType.DEBIT, initiatedTransaction.getReference());
+            ledgerService.createEntry(initiatedTransaction.getBeneficiaryPhone(), initiatedTransaction.getAmount(), LedgerType.CREDIT, initiatedTransaction.getReference());
+
+            initiatedTransaction.setStatus(TransactionStatus.COMPLETED);
+
+            log.info("Transaction completed - {}", transaction.getReference());
+
+            return transactionMapper.toDTO(transactionRepository.save(initiatedTransaction));
+
 
         }catch (DataIntegrityViolationException e)
         {
@@ -94,10 +103,6 @@ public class TransactionService {
             return transactionMapper.toDTO(existingTransaction);
         }
 
-
-
-
-        return null;
     }
 
     /**

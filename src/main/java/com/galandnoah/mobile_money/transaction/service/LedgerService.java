@@ -17,16 +17,20 @@ public class LedgerService {
 
     /**
      * Create an entry in the ledger
-     * */
-    public LedgerEntry createEntry(String userPhone, BigDecimal amount, LedgerType type)
+     *
+     */
+    public void createEntry(String userPhone, BigDecimal amount, LedgerType type, String transactionRef)
     {
         LedgerEntry entry = LedgerEntry.builder()
+                .transactionRef(transactionRef)
                 .userPhone(userPhone)
                 .amount(amount)
                 .type(type)
                 .build();
 
-        return ledgerEntryRepository
+        log.info("Ledger entry for transaction {}", transactionRef);
+
+        ledgerEntryRepository
                 .save(entry);
     }
 }

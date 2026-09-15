@@ -13,7 +13,7 @@ public record CreateTransaction(
         @NotBlank(message = "Le numero de telephone du bénéficiaire ne peut etre nul")
         String beneficiaryPhone,
 
-        @NotBlank(message = "Veuillez entrer le montant de la transaction")
+        @NotNull(message = "Veuillez entrer le montant de la transaction")
         BigDecimal amount,
 
         @NotNull(message = "Veuillez entrer le type de transaction")

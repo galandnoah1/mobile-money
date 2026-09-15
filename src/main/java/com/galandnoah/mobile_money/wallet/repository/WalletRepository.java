@@ -25,7 +25,8 @@ public interface WalletRepository extends JpaRepository<Wallet, UUID> {
 
     @Query(
             value = """
-                    SELECT * FROM wallets w
+                    SELECT  w.id as id, w.user_id as user_id, w.balance, w.currency, w.created_at, w.updated_at
+                                            FROM wallets w
                     JOIN users u ON w.user_id = u.id
                      WHERE u.phone = :phone
                                         """,

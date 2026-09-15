@@ -68,4 +68,20 @@ public class GlobalHandlerException {
                 .status(HttpStatus.NOT_FOUND)
                 .body(apiError);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiError> handleOtherException(RuntimeException exception)
+    {
+
+
+
+        ApiError apiError = new ApiError(exception.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(apiError);
+    }
 }
