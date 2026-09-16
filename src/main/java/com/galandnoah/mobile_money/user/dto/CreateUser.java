@@ -19,7 +19,6 @@ public record CreateUser(
         @Length(max = 5, min = 5, message = "Le code pin doit être compose de 5 chiffres")
         String pin,
 
-        @NotNull(message = "Le role de l'utilisateur est obligatoire")
         UserRole role
 ) {
 }
