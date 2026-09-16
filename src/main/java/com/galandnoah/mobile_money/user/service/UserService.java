@@ -1,6 +1,7 @@
 package com.galandnoah.mobile_money.user.service;
 
 import com.galandnoah.mobile_money.exceptiom.AccountAlreadyExist;
+import com.galandnoah.mobile_money.user.UserRole;
 import com.galandnoah.mobile_money.user.dto.CreateUser;
 import com.galandnoah.mobile_money.user.dto.UserResponse;
 import com.galandnoah.mobile_money.user.entity.User;
@@ -46,7 +47,13 @@ public class UserService {
 
         user.setVerified(false);
 
-        user.setRole(createUser.role());
+        if (createUser.role() != null)
+        {
+            user.setRole(createUser.role());
+        }else
+        {
+            user.setRole(UserRole.CUSTOMER);
+        }
 
         User created = userRepository.save(user);
 

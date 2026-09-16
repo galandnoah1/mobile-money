@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users(
     name varchar(255) not null ,
     phone varchar(9) not null unique check ( length(phone) = 9 ),
     pin varchar(5) not null check ( length(pin) = 5 ) ,
-    role varchar(10) not null check ( role in ('CUSTOMER', 'AGENT', 'MERCHANT', 'ADMIN') ) default 'CUSTOMER',
+    role varchar(10) not null check ( role in ('CUSTOMER','ADMIN') ) default 'CUSTOMER',
     active boolean not null default true,
     verified boolean not null default false,
     created_at timestamptz not null default current_timestamp,
